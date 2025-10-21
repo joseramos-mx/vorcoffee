@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Contenedor con grid fino de fondo */
+.grid-shell {
+  position: relative;
+}
+.grid-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* malla de líneas finas, sin fondo sólido */
+  background:
+    repeating-linear-gradient(
+      to right,
+      rgba(255,255,255,.08) 0 1px,
+      transparent 1px 24px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,.08) 0 1px,
+      transparent 1px 24px
+    );
+  /* desvanecer en bordes (no cubre con blanco) */
+  -webkit-mask: radial-gradient(120% 80% at 50% 50%, #000 60%, transparent 100%);
+          mask: radial-gradient(120% 80% at 50% 50%, #000 60%, transparent 100%);
+  opacity: .6;
+  pointer-events: none;
+  z-index: 0;              /* debajo del contenido */
+}
+
+/* Intensificar grid solo bajo el botón en hover */
+.btn-grid {
+  position: relative;
+  z-index: 1;              /* encima del grid */
+  background: transparent; /* sin fondo blanco por defecto */
+}
+.btn-grid::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 999px;
+  background:
+    repeating-linear-gradient(to right, rgba(255,255,255,.22) 0 1px, transparent 1px 24px),
+    repeating-linear-gradient(to bottom, rgba(255,255,255,.22) 0 1px, transparent 1px 24px);
+  -webkit-mask: radial-gradient(120% 120% at 50% 50%, #000 70%, transparent 100%);
+          mask: radial-gradient(120% 120% at 50% 50%, #000 70%, transparent 100%);
+  opacity: 0;
+  transition: opacity .35s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+.btn-grid:hover::before { opacity: 1; }
+
+/* Carrusel vertical del label */
+.roll { height: 1.25rem; overflow: hidden; }
+.roll-inner { display: grid; transition: transform .45s cubic-bezier(.2,.8,.2,1); }
+.btn-grid:hover .roll-inner { transform: translateY(-100%); }
